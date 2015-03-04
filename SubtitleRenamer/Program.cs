@@ -7,13 +7,15 @@ namespace SubtitleRenamer
 {
     public class Program
     {
+        private const bool WriteToConsole = false;
+
         public static void Main(string[] args)
         {
             try
             {
                 var fileInfos = args.Select(x => new FileInfo(x)).ToList();
 
-                //PrintArgumentsToConsole(fileInfos);
+                PrintArgumentsToConsole(fileInfos);
 
                 FileInfo mediaFile = GetMediaFile(fileInfos);
 
@@ -25,7 +27,7 @@ namespace SubtitleRenamer
                 }
                 else
                 {
-                    Console.WriteLine("No media file found");
+                    WriteTextToConsole("No media file found");
                 }
             }
             catch (Exception e)
@@ -42,7 +44,7 @@ namespace SubtitleRenamer
         {
             foreach (var s in args)
             {
-                Console.WriteLine(s.FullName);
+                WriteTextToConsole(s.FullName);
             }
         }
 
@@ -66,10 +68,18 @@ namespace SubtitleRenamer
                 string newFileName = mediaFileNameWithoutExtension + nonMediaFile.Extension;
 
                 string newFullName = Path.Combine(directory, newFileName);
-                
-                File.Move(nonMediaFile.FullName, newFileName);
 
-                Console.WriteLine(nonMediaFile.FullName + " -> " + newFullName);
+                WriteTextToConsole(nonMediaFile.FullName + " -> " + newFullName);
+
+                File.Move(nonMediaFile.FullName, newFullName);
+            }
+        }
+
+        private static void WriteTextToConsole(string text)
+        {
+            if (WriteToConsole)
+            {
+                Console.WriteLine(text);
             }
         }
     }
